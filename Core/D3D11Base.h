@@ -22,8 +22,6 @@ private:
 	ID3D11PixelShader* pixelShader = nullptr;
 	ID3D11Buffer* vertexBuffer = nullptr;
 
-	MyVertex* vertices = nullptr;
-
 	HWND m_hWnd;
 
 public:

@@ -41,6 +41,8 @@ bool CD3D11Base::InitializeDirect3D(HWND hWnd)
 	if (!CreatePixelShaderFromFile("MyPixelShader.cso")) {
 		return false;
 	}
+	CreateBufferForTriangle();
+
 	CreateViewPort();
 	return true;
 }
@@ -57,7 +59,6 @@ void CD3D11Base::UninitializeDirect3D()
 	if (!immediateContext) { immediateContext->Release(); }
 	if (!d3dDevice) { d3dDevice->Release(); }
 	if (!dxgiSwapChain) { dxgiSwapChain->Release(); }
-	if (!vertices) { delete[] vertices; };
 }
 
 void CD3D11Base::Loop()
@@ -73,9 +74,7 @@ void CD3D11Base::Loop()
 	immediateContext->IASetInputLayout(inputLayout);		//inputLyaer를 장치에 세팅
 	UINT stride = sizeof(MyVertex), offset = 0;
 	immediateContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);	//VertexBuffer들을 장치에 세팅
-
-	int countOfVertices = sizeof(vertices) / sizeof(MyVertex);
-	immediateContext->Draw(countOfVertices, 0);
+immediateContext->Draw(3, 0);
 	dxgiSwapChain->Present(0, 0);
 }
 
@@ -188,17 +187,11 @@ bool CD3D11Base::CreatePixelShaderFromFile(const char* fileName)
 
 void CD3D11Base::CreateBufferForTriangle()
 {
-	/*MyVertex vertices[] = {
+	MyVertex vertices[] = {
 		{ -0.5f, -0.5f, +0.0f },
 		{ +0.0f, +0.5f, +0.0f },
-		{ +0.5f, -0.5f, +0.0f }
-	};*/
-
-	vertices = new MyVertex[sizeof(MyVertex) * 3];
-	vertices[0] = { -0.5f, -0.5f, +0.0f };
-	vertices[1] = { +0.5f, +0.5f, +0.0f };
-	vertices[2] = { +0.5f, -0.5f, +0.0f };
-
+		{ +0.5f, -0.5f, +0.0f },
+	};
 	//Buffer Resource의 특성을 기술한 구조체
 	D3D11_BUFFER_DESC vertexBufferDesc = { sizeof(vertices), D3D11_USAGE_DEFAULT, D3D11_BIND_VERTEX_BUFFER, 0, 0, 0 };//(1: Buffer size with bytes, 2: D3D11_USAGE, 3: 파이프라인에 바인딩되는 방식)
 
@@ -211,8 +204,4 @@ void CD3D11Base::CreateBufferForTriangle()
 
 void CD3D11Base::DeleteBufferForTriangle()
 {
-	if (!vertexBuffer)
-		vertexBuffer->Release();
-	if (!vertices)
-		delete[] vertices;
 }

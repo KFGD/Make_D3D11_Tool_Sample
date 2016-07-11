@@ -31,7 +31,7 @@ namespace Make_D3D11_Tool_Sample
 
         private async void Render()
         {
-            while(bRender)
+            while(true)
             {
                 core.Loop();
                 await Task.Delay(10);
@@ -41,15 +41,8 @@ namespace Make_D3D11_Tool_Sample
 
         private void DrawTriangle_CheckedChanged(object sender, EventArgs e)
         {
-            bool value = ((CheckBox)sender).ThreeState;     //클릭 직전값이 들어감
-            if (value)
-            {
-                core.DeleteBufferForTriangle();
-            }
-            else
-            {
-                core.CreateBufferForTriangle();
-            }
+            //실패 ㅠㅠ
+            //SharpDX를 쓰는 걸로 변경
         }
     }
 }
