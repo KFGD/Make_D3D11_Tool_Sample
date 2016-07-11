@@ -31,4 +31,12 @@ namespace CLICore
 	void Core::Loop() {
 		d3d11Base->Loop();
 	}
+
+	void Core::CreateBufferForTriangle() {
+		d3d11Base->CreateBufferForTriangle();
+	}
+
+	void Core::DeleteBufferForTriangle() {
+		d3d11Base->DeleteBufferForTriangle();
+	}
 }

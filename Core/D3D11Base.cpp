@@ -26,22 +26,21 @@ bool CD3D11Base::InitializeDirect3D(HWND hWnd)
 {
 	// TODO: Initializing Direct3D
 
-	//Device와Swap-Chain 생성을 실패할 시, false리턴
-	if (!CreateDeviceAndSwapChain(hWnd))
+	if (!CreateDeviceAndSwapChain(hWnd)) {
 		return false;
+	}
 
-	if (!CreateAndOMSetRenderTargetView())
+	if (!CreateAndOMSetRenderTargetView()) {
 		return false;
+	}
 
 	if (!CreateVertexShaderFromFileAndInputLayout("MyVertexShader.cso")) {
 		return false;
 	}
-
-
+	
 	if (!CreatePixelShaderFromFile("MyPixelShader.cso")) {
 		return false;
 	}
-	CreateBufferForTriangle();
 	CreateViewPort();
 	return true;
 }
@@ -58,12 +57,12 @@ void CD3D11Base::UninitializeDirect3D()
 	if (!immediateContext) { immediateContext->Release(); }
 	if (!d3dDevice) { d3dDevice->Release(); }
 	if (!dxgiSwapChain) { dxgiSwapChain->Release(); }
+	if (!vertices) { delete[] vertices; };
 }
 
 void CD3D11Base::Loop()
 {
 	// TODO: Rendering
-	//float clearColor[] = { 1, 0, 1, 1 };			//보라색
 	float clearColor[] = { 101 / 255.0f, 156 / 255.0f, 239 / 255.0f, 1 };	//하늘색
 	immediateContext->ClearRenderTargetView(renderTargetView, clearColor);	//Render-Target을 clearColor색으로 지움
 
@@ -75,13 +74,16 @@ void CD3D11Base::Loop()
 	UINT stride = sizeof(MyVertex), offset = 0;
 	immediateContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);	//VertexBuffer들을 장치에 세팅
 
-	immediateContext->Draw(3, 0);
+	int countOfVertices = sizeof(vertices) / sizeof(MyVertex);
+	immediateContext->Draw(countOfVertices, 0);
 	dxgiSwapChain->Present(0, 0);
 }
 
 bool CD3D11Base::CreateDeviceAndSwapChain(HWND hWnd)
 {
 	bool bReturn = true;
+
+	m_hWnd = hWnd;
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = { 0, };		//교환 사슬의 특성들을 설정하기 위한 구조체
 	swapChainDesc.BufferCount = 1;						//후면 버퍼의 개수: 1개
@@ -186,18 +188,31 @@ bool CD3D11Base::CreatePixelShaderFromFile(const char* fileName)
 
 void CD3D11Base::CreateBufferForTriangle()
 {
-	MyVertex vertices[] = {
+	/*MyVertex vertices[] = {
 		{ -0.5f, -0.5f, +0.0f },
 		{ +0.0f, +0.5f, +0.0f },
 		{ +0.5f, -0.5f, +0.0f }
-	};
+	};*/
+
+	vertices = new MyVertex[sizeof(MyVertex) * 3];
+	vertices[0] = { -0.5f, -0.5f, +0.0f };
+	vertices[1] = { +0.5f, +0.5f, +0.0f };
+	vertices[2] = { +0.5f, -0.5f, +0.0f };
 
 	//Buffer Resource의 특성을 기술한 구조체
 	D3D11_BUFFER_DESC vertexBufferDesc = { sizeof(vertices), D3D11_USAGE_DEFAULT, D3D11_BIND_VERTEX_BUFFER, 0, 0, 0 };//(1: Buffer size with bytes, 2: D3D11_USAGE, 3: 파이프라인에 바인딩되는 방식)
 
-																													  //SubResource의 특성을 기술한 구조체
+	//SubResource의 특성을 기술한 구조체
 	D3D11_SUBRESOURCE_DATA vertexBufferSubResourceData = { vertices, sizeof(vertices), 0 };	//(1: 생성하기 위한 SubResource에 대한 Pointer)
 
-																							//Buffer생성(Vertex Buffer, Index Buffer, Shader-Constant Buffer)
+	//Buffer생성(Vertex Buffer, Index Buffer, Shader-Constant Buffer)
 	d3dDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferSubResourceData, &vertexBuffer);
+}
+
+void CD3D11Base::DeleteBufferForTriangle()
+{
+	if (!vertexBuffer)
+		vertexBuffer->Release();
+	if (!vertices)
+		delete[] vertices;
 }

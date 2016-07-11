@@ -13,6 +13,8 @@ namespace Make_D3D11_Tool_Sample
     public partial class Form1 : Form
     {
 
+        bool bRender = true;
+
         CLICore.Core core = null;
         
         public Form1()
@@ -29,12 +31,25 @@ namespace Make_D3D11_Tool_Sample
 
         private async void Render()
         {
-            while(true)
+            while(bRender)
             {
                 core.Loop();
                 await Task.Delay(10);
             }
             core.UninitializeDirect3D();
+        }
+
+        private void DrawTriangle_CheckedChanged(object sender, EventArgs e)
+        {
+            bool value = ((CheckBox)sender).ThreeState;     //클릭 직전값이 들어감
+            if (value)
+            {
+                core.DeleteBufferForTriangle();
+            }
+            else
+            {
+                core.CreateBufferForTriangle();
+            }
         }
     }
 }

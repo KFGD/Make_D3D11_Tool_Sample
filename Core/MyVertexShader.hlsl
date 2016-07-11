@@ -1,4 +1,4 @@
-ï»¿struct VERTEX_IN
+struct VERTEX_IN
 {
     float3 pos : POSITION;
 };
@@ -11,6 +11,6 @@ struct PIXEL_IN
 PIXEL_IN main(VERTEX_IN inp)
 {
     PIXEL_IN ret;
-    ret.pos = float4(inp.pos, 1); //0ì€ ë³€ìœ„(Vector), 1ì€ ìœ„ì¹˜(Point)
+    ret.pos = float4(inp.pos, 1); //0Àº º¯À§(Vector), 1Àº À§Ä¡(Point)
     return ret;
 }

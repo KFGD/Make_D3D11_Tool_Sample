@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.Panel_Render = new System.Windows.Forms.Panel();
+            this.DrawTriangle = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // Panel_Render
@@ -38,21 +39,35 @@
             this.Panel_Render.Size = new System.Drawing.Size(500, 500);
             this.Panel_Render.TabIndex = 0;
             // 
+            // DrawTriangle
+            // 
+            this.DrawTriangle.AutoSize = true;
+            this.DrawTriangle.Location = new System.Drawing.Point(582, 51);
+            this.DrawTriangle.Name = "DrawTriangle";
+            this.DrawTriangle.Size = new System.Drawing.Size(124, 19);
+            this.DrawTriangle.TabIndex = 1;
+            this.DrawTriangle.Text = "삼각형 그리기";
+            this.DrawTriangle.UseVisualStyleBackColor = true;
+            this.DrawTriangle.CheckedChanged += new System.EventHandler(this.DrawTriangle_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(854, 528);
+            this.Controls.Add(this.DrawTriangle);
             this.Controls.Add(this.Panel_Render);
             this.Name = "Form1";
             this.Text = "D3D11_SampleTool";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Panel Panel_Render;
+        private System.Windows.Forms.CheckBox DrawTriangle;
     }
 }
 

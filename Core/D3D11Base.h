@@ -22,11 +22,16 @@ private:
 	ID3D11PixelShader* pixelShader = nullptr;
 	ID3D11Buffer* vertexBuffer = nullptr;
 
+	MyVertex* vertices = nullptr;
+
+	HWND m_hWnd;
+
 public:
 	CD3D11Base();
 	~CD3D11Base();
 	bool InitializeDirect3D(HWND hWnd);
 	void CreateBufferForTriangle();
+	void DeleteBufferForTriangle();
 	void UninitializeDirect3D();
 	void Loop();
 	
