@@ -1,3 +1,4 @@
+﻿struct PIXEL_IN
 {
     float4 pos : SV_POSITION;
 };
